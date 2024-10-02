@@ -16,3 +16,5 @@ URL: https://api.escuelajs.co/graphql
 npm install
 Запуск клиента
 npm run dev
+
+email: "john@mail.com", password: "changeme"
