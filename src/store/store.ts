@@ -2,8 +2,8 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface ILoginState {
-  accessToken: string | null;
-  refreshToken: string | null;
+  accessToken: string;
+  refreshToken: string;
   saveTokens: (accessToken: string, refreshToken: string) => void;
   clearTokens: () => void;
 }
@@ -11,10 +11,10 @@ interface ILoginState {
 export const useLoginStore = create<ILoginState>()(
   persist(
     (set) => ({
-      accessToken: null,
-      refreshToken: null,
+      accessToken: "",
+      refreshToken: "",
       saveTokens: (accessToken: string, refreshToken: string) => set({ accessToken, refreshToken }),
-      clearTokens: () => set({ accessToken: null, refreshToken: null }),
+      clearTokens: () => set({ accessToken: "", refreshToken: "" }),
     }),
     {
       name: "login",

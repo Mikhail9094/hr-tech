@@ -1,29 +1,16 @@
 "use client";
 import Container from "@/components/container/container";
 import Loading from "@/components/loading";
-import { useToast } from "@/hooks/use-toast";
 import { useProfile } from "@/hooks/useProfile";
 import { useLoginStore } from "@/store/store";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
-  const { profile, loading, error } = useProfile();
+  const { profile, loading } = useProfile();
   const { accessToken } = useLoginStore.getState();
-  const { toast } = useToast();
-
-  useEffect(() => {
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
-      });
-    }
-  }, [error]);
 
   if (loading) return <Loading />;
 

@@ -51,12 +51,7 @@ export const refreshAccessToken = async () => {
 
     const { access_token, refresh_token } = result.data.refreshToken;
     saveTokens(access_token, refresh_token);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    toast({
-      variant: "destructive",
-      title: "Error",
-      description: error.message,
-    });
+  } catch (error) {
+    console.log("error", error);
   }
 };

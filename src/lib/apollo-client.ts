@@ -18,11 +18,21 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const errorLink = onError(({ graphQLErrors }) => {
+const errorLink = onError(({ graphQLErrors, forward, operation }) => {
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
-      if (err.extensions?.code === "UNAUTHENTICATED") {
-        refreshAccessToken();
+      if (err.extensions?.code === "UNAUTHENTICATED" && window.location.pathname !== "/") {
+        refreshAccessToken().then(() => {
+          const { accessToken } = useLoginStore.getState();
+          operation.setContext(({ headers = {} }) => ({
+            headers: {
+              ...headers,
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }));
+
+          return forward(operation);
+        });
       }
     }
   }
