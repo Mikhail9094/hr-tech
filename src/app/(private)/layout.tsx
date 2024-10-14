@@ -1,27 +1,18 @@
 "use client";
 import Header from "@/components/header/header";
-import Loading from "@/components/loading";
-import { useProfile } from "@/hooks/useProfile";
-import { useRouter } from "next/navigation";
+import AuthLayout from "@/layouts/AuthLayout";
 
 export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const router = useRouter();
-  const { profile, loading } = useProfile();
-
-  if (loading) return <Loading />;
-
-  if (!profile) {
-    router.push("/");
-  } else {
-    return (
-      <div>
+  return (
+    <div>
+      <AuthLayout>
         <Header />
         <main>{children}</main>
-      </div>
-    );
-  }
+      </AuthLayout>
+    </div>
+  );
 }

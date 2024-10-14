@@ -1,7 +1,8 @@
-import { useLoginStore } from "@/store/store";
 import { gql } from "@apollo/client";
 import client from "../lib/apollo-client";
 import { toast } from "@/hooks/use-toast";
+import { TOKEN_AUTH } from "@/constants/auth";
+import { useLoginStore } from "@/store/store";
 
 const LOGIN = gql`
   mutation Login($email: String!, $password: String!) {
@@ -22,7 +23,7 @@ const REFRESH_TOKEN = gql`
 `;
 
 export const signIn = async (email: string, password: string) => {
-  const { saveTokens } = useLoginStore.getState();
+  const { getUser } = useLoginStore.getState();
   try {
     const response = await client.mutate({
       mutation: LOGIN,
@@ -30,7 +31,9 @@ export const signIn = async (email: string, password: string) => {
     });
 
     const { access_token, refresh_token } = response.data.login;
-    saveTokens(access_token, refresh_token);
+    localStorage.setItem(TOKEN_AUTH, access_token);
+    document.cookie = `refreshToken=${refresh_token}; path=/`;
+    getUser();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     toast({
@@ -42,7 +45,11 @@ export const signIn = async (email: string, password: string) => {
 };
 
 export const refreshAccessToken = async () => {
-  const { refreshToken, saveTokens } = useLoginStore.getState();
+  const { getUser } = useLoginStore.getState();
+  const cookies = document.cookie.split(";");
+  const refreshTokenCookie = cookies.find((cookie) => cookie.trim().startsWith("refreshToken="));
+  const refreshToken = refreshTokenCookie?.split("=")[1];
+
   try {
     const result = await client.mutate({
       mutation: REFRESH_TOKEN,
@@ -50,7 +57,9 @@ export const refreshAccessToken = async () => {
     });
 
     const { access_token, refresh_token } = result.data.refreshToken;
-    saveTokens(access_token, refresh_token);
+    localStorage.setItem(TOKEN_AUTH, access_token);
+    document.cookie = `refreshToken=${refresh_token}; path=/`;
+    getUser();
   } catch (error) {
     console.log("error", error);
   }

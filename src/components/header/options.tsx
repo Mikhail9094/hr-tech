@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import { useLoginStore } from "@/store/store";
 import { useRouter } from "next/navigation";
@@ -9,16 +10,21 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
-import { useProfile } from "@/hooks/useProfile";
 import { Button } from "../ui/button";
+import { TOKEN_AUTH } from "@/constants/auth";
+import { useApolloClient } from "@apollo/client";
 
 export default function IconsGroup() {
   const router = useRouter();
-  const { clearTokens } = useLoginStore.getState();
-  const { profile, loading } = useProfile();
+  const { user, loading, clearUser } = useLoginStore.getState();
+  const client = useApolloClient();
+
   const logOut = () => {
-    clearTokens();
-    router.push("/");
+    localStorage.removeItem(TOKEN_AUTH);
+    document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;";
+    client.cache.reset();
+    clearUser();
+    router.replace("/");
   };
 
   return (
@@ -35,7 +41,7 @@ export default function IconsGroup() {
           <DropdownMenuTrigger className="w-[38px] rounded-full cursor-pointer outline-none transition duration-300 ease-in-out transform hover:scale-110 ">
             <Avatar>
               <AvatarImage
-                src={loading ? "/default.svg" : profile?.myProfile.avatar}
+                src={loading ? "/default.svg" : user?.avatar}
                 alt="Avatar"
                 className="rounded-full"
               />

@@ -1,90 +1,13 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { toast } from "@/hooks/use-toast";
-import { useProfile } from "@/hooks/useProfile";
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
-import Image from "next/image";
+import MainInfo from "./mainInfo.tsx";
+import { fakeDataDetailsCard } from "./detailsCard/fakeDataDetailsCard";
+import DetailsCard from "./detailsCard/detailsCard";
 
 export default function UserData() {
-  const { profile, loading, error } = useProfile();
-
-  if (error) {
-    toast({
-      variant: "destructive",
-      title: "Error",
-      description: error.message,
-    });
-  }
-
   return (
     <aside className="flex flex-col items-center ">
-      <div className="w-[150px] h-[150px] relative top-4 ">
-        <Avatar>
-          <AvatarImage
-            src={loading ? "/default.svg" : profile?.myProfile.avatar}
-            alt="Avatar"
-            className="rounded-full"
-          />
-        </Avatar>
-      </div>
+      <MainInfo />
       <div className="flex flex-col gap-4 font-medium bg-transparent">
-        <Card className="w-56 border-none rounded-2xl bg-primary">
-          <CardContent className="flex flex-col p-6 gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4">
-                <Image
-                  src={"/aside/tel.svg"}
-                  width={0}
-                  height={0}
-                  alt="Telephone"
-                  className="w-full h-full"
-                />
-              </div>
-              <span>07911 654321</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4">
-                <Image
-                  src={"/aside/mail.svg"}
-                  width={0}
-                  height={0}
-                  alt="Email"
-                  className="w-full h-full"
-                />
-              </div>
-              <span>avd.yana@videorollnet</span>
-            </div>
-            <div className="flex items-center gap-[14px]">
-              <div className="w-4 h-4">
-                <Image
-                  src={"/aside/linked.svg"}
-                  width={0}
-                  height={0}
-                  alt="linkedIn"
-                  className="w-full h-full"
-                />
-              </div>
-              <div className="w-4 h-4">
-                <Image
-                  src={"/aside/facebook.svg"}
-                  width={0}
-                  height={0}
-                  alt="facebook"
-                  className="w-full h-full"
-                />
-              </div>
-              <div className="w-4 h-4">
-                <Image
-                  src={"/aside/twitter.svg"}
-                  width={0}
-                  height={0}
-                  alt="twitter"
-                  className="w-full h-full"
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="w-56 border-none rounded-2xl bg-primary">
+        {/* <Card className="w-56 border-none rounded-2xl bg-primary">
           <CardContent className="flex flex-col p-6">
             <p className="mb-4">Hire Date</p>
             <p className="mb-2">Sep. 3,2020</p>
@@ -219,7 +142,10 @@ export default function UserData() {
               <span>4 More...</span>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
+        {fakeDataDetailsCard.map((item) => (
+          <DetailsCard title={item.title} info={item.info} key={item.title.text} />
+        ))}
       </div>
     </aside>
   );

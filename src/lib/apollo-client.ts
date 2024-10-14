@@ -1,5 +1,5 @@
+import { TOKEN_AUTH } from "@/constants/auth";
 import { refreshAccessToken } from "@/sevices/service";
-import { useLoginStore } from "@/store/store";
 import { ApolloClient, ApolloLink, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
@@ -9,7 +9,8 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const { accessToken } = useLoginStore.getState();
+  const accessToken = localStorage.getItem(TOKEN_AUTH);
+
   return {
     headers: {
       ...headers,
@@ -23,7 +24,8 @@ const errorLink = onError(({ graphQLErrors, forward, operation }) => {
     for (const err of graphQLErrors) {
       if (err.extensions?.code === "UNAUTHENTICATED" && window.location.pathname !== "/") {
         refreshAccessToken().then(() => {
-          const { accessToken } = useLoginStore.getState();
+          const accessToken = localStorage.getItem(TOKEN_AUTH);
+
           operation.setContext(({ headers = {} }) => ({
             headers: {
               ...headers,

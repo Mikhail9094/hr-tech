@@ -1,21 +1,19 @@
 "use client";
 import Container from "@/components/container/container";
 import Loading from "@/components/loading";
-import { useProfile } from "@/hooks/useProfile";
-import { useLoginStore } from "@/store/store";
+import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
-  const { profile, loading } = useProfile();
-  const { accessToken } = useLoginStore.getState();
+  const { isAuth, loading } = useAuth();
 
   if (loading) return <Loading />;
 
-  if (profile && accessToken) {
-    router.push("/my-info/time-off");
+  if (isAuth) {
+    router.replace("/my-info/time-off");
   } else {
     return (
       <Container className="flex-col h-dvh">

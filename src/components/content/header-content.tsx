@@ -1,7 +1,7 @@
 "use client";
 import { myInfoNavList } from "@/constants/my-info-nav-list";
-import { useProfile } from "@/hooks/useProfile";
 import { cn } from "@/lib/utils";
+import { useLoginStore } from "@/store/store";
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -16,14 +16,14 @@ import { usePathname } from "next/navigation";
 
 export default function HeaderContent() {
   const pathname = usePathname();
-  const { profile, error } = useProfile();
+  const { user, error } = useLoginStore.getState();
 
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="flex flex-col h-[200px] justify-end">
       <div className="flex justify-between mb-9">
-        <h1 className="text-3xl font-semibold">{profile?.myProfile.name}</h1>
+        <h1 className="text-3xl font-semibold">{user?.name}</h1>
         <div className="flex gap-4">
           <Select>
             <SelectTrigger className="flex items-center justify-center w-40 h-8 gap-2 border-2 border-border rounded-[8px]">

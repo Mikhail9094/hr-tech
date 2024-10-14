@@ -5,7 +5,6 @@ const GET_PROFILE = gql`
     myProfile {
       id
       name
-      avatar
     }
   }
 `;
@@ -13,11 +12,13 @@ interface IProfileData {
   myProfile: {
     id: string;
     name: string;
-    avatar: string;
   };
 }
 
-export function useProfile() {
-  const { data: profile, loading, error } = useQuery<IProfileData>(GET_PROFILE);
-  return { profile, loading, error };
+export function useAuth() {
+  const { data, loading, error } = useQuery<IProfileData>(GET_PROFILE);
+
+  const isAuth = !!data;
+
+  return { isAuth, loading, error };
 }
