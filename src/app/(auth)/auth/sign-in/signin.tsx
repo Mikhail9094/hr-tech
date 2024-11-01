@@ -31,10 +31,10 @@ export function SignInForm() {
   };
   return (
     <div className="flex min-h-screen bg-black">
-      <form className="max-w-sm m-auto" onSubmit={handleSubmit(onSubmit)}>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Login</CardTitle>
+      <form className="max-w-sm m-auto " onSubmit={handleSubmit(onSubmit)}>
+        <Card className="p-4 ">
+          <CardHeader className="mb-4">
+            <CardTitle className="text-2xl text-center">Login</CardTitle>
             <CardDescription>Enter your email below to login to your account.</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
@@ -52,8 +52,8 @@ export function SignInForm() {
               <Input id="password" type="password" {...register("password", { required: true })} />
             </div>
           </CardContent>
-          <CardFooter>
-            <Button className="w-full">Login</Button>
+          <CardFooter className="p-0">
+            <Button className="w-full bg-green-500 hover:bg-green-400">Login</Button>
           </CardFooter>
         </Card>
       </form>
